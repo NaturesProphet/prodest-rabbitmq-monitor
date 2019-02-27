@@ -21,7 +21,7 @@ const rancher_url = process.env.RANCHER_URL;
 ////////////////////////////////////////////////////////////////////////////////////////////
 /////////// Token de autenticação Basic auth do RabbitMQ gerado com as credenciais /////////
 var auth = "Basic " + new Buffer.from( username + ":" + password ).toString( "base64" );
-var reqOptions = {
+var rabbitOptions = {
     uri: rabbitUri,
     headers: {
         'User-Agent': 'Request-Promise',
@@ -57,22 +57,25 @@ const rancherOptions2 = {
  * Função que verifica continuamente as velocidades de publish e delivery e executa ações de correção
  */
 async function main () {
-    while ( true ) {
+    while ( true ) { // é feio mas necessário. ninguém reclama quando ve um while(true) em arduinos..
         var res = null;
         try {
-            res = await request( reqOptions );
+            res = await request( rabbitOptions );
             var publishRate = res[ 0 ].message_stats.publish_details.rate;
             var deliveryRate = res[ 0 ].message_stats.deliver_details.rate;
-            console.log( "Publish Rate: " + publishRate );
-            console.log( "Consumo " + deliveryRate );
-            console.log( '----------------------------' )
+            // deixa a gente ver a mágica em ambiente dev
+            if ( process.env.NODE_ENV != 'production' ) {
+                console.log( "Publish Rate: " + publishRate );
+                console.log( "Consumo " + deliveryRate );
+                console.log( '----------------------------' )
+            }
 
             if ( publishRate < 30 ) {
                 await lowPublish( publishRate );
             }
 
             if ( deliveryRate < 30 ) {
-                await lowDelivery();
+                await lowDelivery( deliveryRate );
             }
 
         } catch ( erro ) {
@@ -106,7 +109,7 @@ async function lowPublish ( publishRate ) {
 
             // verifica o fluxo no RabbitMQ novamente para ver se a geocontrol já voltou
             try {
-                var res = await request( reqOptions );
+                var res = await request( rabbitOptions );
                 rate = res[ 0 ].message_stats.publish_details.rate;
                 if ( rate == 0 ) {
                     notifySlack( `A Geocontrol ainda não voltou! ` +
@@ -150,7 +153,7 @@ async function lowDelivery ( deliveryRate ) {
 
             // verifica o fluxo no RabbitMQ novamente para ver se a pipeline já voltou
             try {
-                var res = await request( reqOptions );
+                var res = await request( rabbitOptions );
                 rate = res[ 0 ].message_stats.publish_details.rate;
                 if ( rate == 0 ) {
                     notifySlack( `O Logstash-Pipeline ainda não voltou! ` +

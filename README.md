@@ -11,6 +11,7 @@ A intenção é estabilizar nossas pilhas de serviço no rancher, nao sendo mais
 
 ## Variáveis de ambiente para a utilização correta
 ```bash
+NODE_ENV                        # Ajuste para 'production' quando for pra vera.
 RABBIT_HOST                     # Servidor do RabbitMQ
 RABBIT_API_PORT                 # Porta do RabbitMQ
 RABBIT_USER                     # Usuário do RabbitMQ
