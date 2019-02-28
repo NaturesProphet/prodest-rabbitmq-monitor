@@ -1,5 +1,4 @@
 const request = require( 'request-promise' );
-const restartRancher = require( 'restart-rancher' );
 const sleep = require( 'sleep' ).sleep;
 const slackWebHook = process.env.SLACK_WEB_HOOK
 const slack = require( 'slack-notify' )( slackWebHook );
@@ -29,16 +28,6 @@ var rabbitOptions = {
     },
     json: true
 };
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////// Configuração para restartar o logstash-rabbit //////////////////////
-const rancherOptions1 = {
-    RANCHER_ACCESS_KEY: rancher_access_key,
-    RANCHER_SECRET_KEY: rancher_secret_key,
-    PROJECT_ID: rancher_project_id_1,
-    SERVICE_ID: rancher_service_id_1,
-    RANCHER_URL: rancher_url
-}
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,8 +81,7 @@ async function lowPublish ( publishRate ) {
         var rate = publishRate;
         while ( rate == 0 ) {
             console.log( 'reiniciando rancher' );
-            restartRancher( rancherOptions1 );
-            sleep( 180 ); // aguarda 3 minutos para ter certeza que o rancher ja voltou
+            await restartRancher();
 
             // verifica o fluxo no RabbitMQ novamente para ver se a geocontrol já voltou
             try {
@@ -149,6 +137,53 @@ async function notifySlack ( message, type ) {
             break;
     }
 }
+
+
+
+async function restartRancher () {
+    const options = {
+        RANCHER_ACCESS_KEY: rancher_access_key,
+        RANCHER_SECRET_KEY: rancher_secret_key,
+        PROJECT_ID: rancher_project_id_1,
+        SERVICE_ID: rancher_service_id_1,
+        RANCHER_URL: rancher_url
+    }
+
+    const requestOptions = {
+        method: 'POST',
+        uri: `${options.RANCHER_URL}/${options.PROJECT_ID}/services/${options.SERVICE_ID}?action=restart`,
+        auth: {
+            user: options.RANCHER_ACCESS_KEY,
+            pass: options.RANCHER_SECRET_KEY
+        },
+        body: {
+            "rollingRestartStrategy": {
+                "batchSize": 1,
+                "intervalMillis": 2000
+            }
+        },
+        json: true
+    };
+    request( requestOptions )
+        .then( function ( parsedBody ) {
+            console.log( `OK! Service ${parsedBody.name} is ${parsedBody.state}` );
+            sleep( 180 );
+        } )
+        .catch( function ( err ) {
+            console.log( `Could not restart the service.\n${err.message}` );
+        } );
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
