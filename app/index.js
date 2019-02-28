@@ -99,7 +99,7 @@ async function lowPublish ( publishRate ) {
                         `${res[ 0 ].message_stats.deliver_details.rate} msgs/s`;
                     console.log( msg );
                     notifySlack( msg, 'success' );
-                    return;
+                    break;
                 }
             } catch ( erro ) {
                 var msg = `Eu enviei um comando para reiniciar o logstash-rabbit no rancher, ` +
