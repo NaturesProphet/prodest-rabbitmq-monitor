@@ -1,5 +1,4 @@
 stages:
-  - quality
   - build
   - deploy
 
@@ -8,11 +7,6 @@ cache:
   paths:
   - node_modules/
 
-quality_job:
-  image: registry.es.gov.br/espm/infraestrutura/containers/sonar-scanner:3.3.0.1492
-  stage: quality
-  script:
-   - sonar-scanner
 
 build_job:
   stage: build
