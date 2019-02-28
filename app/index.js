@@ -95,25 +95,20 @@ async function main () {
 async function lowPublish ( publishRate ) {
 
     if ( publishRate != 0 ) {
-        try {
-            var msg = `Fluxo anômalo na entrada da Geocontrol: ${publishRate} msgs/s`;
-            await notifySlack( msg, 'alert' );
-        } catch ( erro ) {
-            console.log( msg );
-            console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
-        }
+        var msg = `Fluxo anômalo na entrada da Geocontrol: ${publishRate} msgs/s`;
+        console.log( msg );
+
+        await notifySlack( msg, 'alert' );
+
     } else if ( publishRate == 0 ) {
         var msg = `A GEOCONTROL CAIU! ( Corram para as colinas! ). ` +
             `Vou reiniciar o logstash-rabbit agora...`;
-        try {
-            await notifySlack( msg, 'bug' );
-        } catch ( erro ) {
-            console.log( msg );
-            console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
-        }
+        console.log( msg );
+        await notifySlack( msg, 'bug' );
 
         var rate = publishRate;
         while ( rate == 0 ) {
+            console.log( 'reiniciando rancher' );
             await restartRancher( rancherOptions1 );
             sleep( 180 ); // aguarda 3 minutos para ter certeza que o rancher ja voltou
 
@@ -122,39 +117,24 @@ async function lowPublish ( publishRate ) {
                 var res = await request( rabbitOptions );
                 rate = res[ 0 ].message_stats.publish_details.rate;
                 if ( rate == 0 ) {
-                    try {
-
-                        var msg = `A Geocontrol ainda não voltou! ` +
-                            `vou reiniciar o logstash-rabbit novamente`;
-
-                        notifySlack( msg, 'note' );
-
-                    } catch ( erro ) {
-                        console.log( msg )
-                        console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
-                    }
+                    var msg = `A Geocontrol ainda não voltou! ` +
+                        `vou reiniciar o logstash-rabbit novamente`;
+                    console.log( msg );
+                    notifySlack( msg, 'note' );
                 } else {
-                    try {
-                        var msg = `A Geocontrol se reconectou! todos os sistemas funcionando. ` +
-                            `Velocidade de publish: ${rate} msgs/s ` +
-                            `Velocidade de Delivery: ` +
-                            `${res[ 0 ].message_stats.deliver_details.rate} msgs/s`;
-                        notifySlack( msg, 'success' );
-                    } catch ( erro ) {
-                        console.log( msg )
-                        console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
-                    }
+                    var msg = `A Geocontrol se reconectou! todos os sistemas funcionando. ` +
+                        `Velocidade de publish: ${rate} msgs/s ` +
+                        `Velocidade de Delivery: ` +
+                        `${res[ 0 ].message_stats.deliver_details.rate} msgs/s`;
+                    console.log( msg );
+                    notifySlack( msg, 'success' );
                 }
             } catch ( erro ) {
-                try {
-                    var msg = `Eu enviei um comando para reiniciar o logstash-rabbit no rancher, ` +
-                        `e após esperar por 3 minutos, fui consultar a situação no RabbitMQ, ` +
-                        `mas obtive o seguinte erro: ${erro}.  Vou tentar reiniciar novamente!`;
-                    notifySlack( msg, 'bug' );
-                } catch ( erro ) {
-                    console.log( msg )
-                    console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
-                }
+                var msg = `Eu enviei um comando para reiniciar o logstash-rabbit no rancher, ` +
+                    `e após esperar por 3 minutos, fui consultar a situação no RabbitMQ, ` +
+                    `mas obtive o seguinte erro: ${erro}.  Vou tentar reiniciar novamente!`;
+                console.log( msg );
+                notifySlack( msg, 'bug' );
             }
         }
 
@@ -170,15 +150,19 @@ async function lowPublish ( publishRate ) {
  */
 async function lowDelivery ( deliveryRate ) {
     if ( deliveryRate != 0 ) {
-
-        await notifySlack( `Fluxo anômalo no consumo interno da pipeline : ${deliveryRate} msgs/s`, 'alert' );
+        var msg = `Fluxo anômalo no consumo interno da pipeline : ${deliveryRate} msgs/s`;
+        console.log( msg );
+        await notifySlack( msg, 'alert' );
 
     } else if ( deliveryRate == 0 ) {
-        await notifySlack( `O LOGSTASH-PIPELINE CAIU!!!! ( Corram para as colinas! ). ` +
-            `Vou reiniciar o logstash-pipeline agora...`, 'bug' );
+        var msg = `O LOGSTASH-PIPELINE CAIU!!!! ( Corram para as colinas! ). ` +
+            `Vou reiniciar o logstash-pipeline agora...`;
+        console.log( msg );
+        await notifySlack( msg, 'bug' );
 
         var rate = deliveryRate;
         while ( rate == 0 ) {
+            console.log( 'reiniciando logstash-pipeline' );
             await restartRancher( rancherOptions2 );
             sleep( 180 ); // aguarda 3 minutos para ter certeza que o rancher ja voltou
 
@@ -187,17 +171,23 @@ async function lowDelivery ( deliveryRate ) {
                 var res = await request( rabbitOptions );
                 rate = res[ 0 ].message_stats.publish_details.rate;
                 if ( rate == 0 ) {
-                    notifySlack( `O Logstash-Pipeline ainda não voltou! ` +
-                        `vou reiniciar o logstash-pipeline novamente`, 'note' );
+                    var msg = `O Logstash-Pipeline ainda não voltou! ` +
+                        `vou reiniciar o logstash-pipeline novamente`;
+                    console.log( msg );
+                    notifySlack( msg, 'note' );
                 } else {
-                    notifySlack( `O Logstash-pipeline se reconectou! todos os sistemas funcionando. ` +
+                    var msg = `O Logstash-pipeline se reconectou! todos os sistemas funcionando. ` +
                         `Velocidade de publish: ${res[ 0 ].message_stats.publish_details.rate} msgs/s ` +
-                        `Velocidade de Delivery: ${rate} msgs/s`, 'success' );
+                        `Velocidade de Delivery: ${rate} msgs/s`;
+                    console.log( msg );
+                    notifySlack( msg, 'success' );
                 }
             } catch ( erro ) {
-                notifySlack( `Eu enviei um comando para reiniciar o logstash-pipeline no rancher, ` +
+                var msg = `Eu enviei um comando para reiniciar o logstash-pipeline no rancher, ` +
                     `e após esperar por 3 minutos, fui consultar a situação no RabbitMQ, ` +
-                    `mas obtive o seguinte erro: ${erro}.  Vou tentar reiniciar novamente!`, 'bug' );
+                    `mas obtive o seguinte erro: ${erro}.  Vou tentar reiniciar novamente!`;
+                console.log( msg );
+                notifySlack( msg, 'bug' );
             }
         }
 

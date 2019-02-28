@@ -15,7 +15,8 @@ build_job:
   services:
     - docker:dind
   only:
-    - tags
+    branch: master
+#    - tags
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$CI_BUILD_TAG .
@@ -27,7 +28,8 @@ deploy_job:
   stage: deploy
   image: registry.es.gov.br/espm/infraestrutura/containers/node:8.12.0
   only:
-    - tags
+    branch: master
+#    - tags
   script:
     - npm i upgrade-rancher
     - ./node_modules/.bin/upgrade-rancher --IMAGE $CI_REGISTRY_IMAGE:$CI_BUILD_TAG --SERVICE_ID 1s869
