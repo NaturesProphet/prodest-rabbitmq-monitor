@@ -1,6 +1,6 @@
 {
   "name": "rabbit-monitor",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Sistema para monitorar o trafego de informações no RabbitMQ do realtime e reiniciar o produtor em casos de queda da geocontrol, além de notificar a galera pelo slack",
   "main": "index.js",
   "scripts": {
