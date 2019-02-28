@@ -95,12 +95,22 @@ async function main () {
 async function lowPublish ( publishRate ) {
 
     if ( publishRate != 0 ) {
-
-        await notifySlack( `Fluxo anômalo na entrada da Geocontrol: ${publishRate} msgs/s`, 'alert' );
-
+        try {
+            var msg = `Fluxo anômalo na entrada da Geocontrol: ${publishRate} msgs/s`;
+            await notifySlack( msg, 'alert' );
+        } catch ( erro ) {
+            console.log( msg );
+            console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
+        }
     } else if ( publishRate == 0 ) {
-        await notifySlack( `A GEOCONTROL CAIU! ( Corram para as colinas! ). ` +
-            `Vou reiniciar o logstash-rabbit agora...`, 'bug' );
+        var msg = `A GEOCONTROL CAIU! ( Corram para as colinas! ). ` +
+            `Vou reiniciar o logstash-rabbit agora...`;
+        try {
+            await notifySlack( msg, 'bug' );
+        } catch ( erro ) {
+            console.log( msg );
+            console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
+        }
 
         var rate = publishRate;
         while ( rate == 0 ) {
@@ -112,18 +122,39 @@ async function lowPublish ( publishRate ) {
                 var res = await request( rabbitOptions );
                 rate = res[ 0 ].message_stats.publish_details.rate;
                 if ( rate == 0 ) {
-                    notifySlack( `A Geocontrol ainda não voltou! ` +
-                        `vou reiniciar o logstash-rabbit novamente`, 'note' );
+                    try {
+
+                        var msg = `A Geocontrol ainda não voltou! ` +
+                            `vou reiniciar o logstash-rabbit novamente`;
+
+                        notifySlack( msg, 'note' );
+
+                    } catch ( erro ) {
+                        console.log( msg )
+                        console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
+                    }
                 } else {
-                    notifySlack( `A Geocontrol se reconectou! todos os sistemas funcionando. ` +
-                        `Velocidade de publish: ${rate} msgs/s ` +
-                        `Velocidade de Delivery: ` +
-                        `${res[ 0 ].message_stats.deliver_details.rate} msgs/s`, 'success' );
+                    try {
+                        var msg = `A Geocontrol se reconectou! todos os sistemas funcionando. ` +
+                            `Velocidade de publish: ${rate} msgs/s ` +
+                            `Velocidade de Delivery: ` +
+                            `${res[ 0 ].message_stats.deliver_details.rate} msgs/s`;
+                        notifySlack( msg, 'success' );
+                    } catch ( erro ) {
+                        console.log( msg )
+                        console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
+                    }
                 }
             } catch ( erro ) {
-                notifySlack( `Eu enviei um comando para reiniciar o logstash-rabbit no rancher, ` +
-                    `e após esperar por 3 minutos, fui consultar a situação no RabbitMQ, ` +
-                    `mas obtive o seguinte erro: ${erro}.  Vou tentar reiniciar novamente!`, 'bug' );
+                try {
+                    var msg = `Eu enviei um comando para reiniciar o logstash-rabbit no rancher, ` +
+                        `e após esperar por 3 minutos, fui consultar a situação no RabbitMQ, ` +
+                        `mas obtive o seguinte erro: ${erro}.  Vou tentar reiniciar novamente!`;
+                    notifySlack( msg, 'bug' );
+                } catch ( erro ) {
+                    console.log( msg )
+                    console.log( `falhou ao enviar essa mensagem ao slack. ${erro.message}` );
+                }
             }
         }
 
