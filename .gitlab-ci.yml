@@ -7,13 +7,10 @@ cache:
   key: 'rabbit-monitor'
   paths:
   - node_modules/
- 
 
 quality_job:
   image: registry.es.gov.br/espm/infraestrutura/containers/sonar-scanner:3.3.0.1492
   stage: quality
-  dependencies:
-      - test_job    
   script:
    - sonar-scanner
 
@@ -31,7 +28,7 @@ build_job:
     - docker push $CI_REGISTRY_IMAGE:$CI_BUILD_TAG
     - docker tag $CI_REGISTRY_IMAGE:$CI_BUILD_TAG $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:latest
-   
+
 deploy_job:
   stage: deploy
   image: registry.es.gov.br/espm/infraestrutura/containers/node:8.12.0
