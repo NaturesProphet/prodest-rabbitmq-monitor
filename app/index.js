@@ -171,6 +171,7 @@ async function restartRancher () {
         } )
         .catch( function ( err ) {
             console.log( `Could not restart the service.\n${err.message}` );
+            sleep( 5 );
         } );
 }
 
