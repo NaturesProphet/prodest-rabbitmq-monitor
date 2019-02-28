@@ -19,7 +19,7 @@ RABBIT_PASSWORD                 # Senha do RabbitMQ
 SLACK_WEB_HOOK                  # WebHook configurado no slack apps
 SLACK_CHANNEL                   # Canal no slack onde serão enviadas as mensagens de eventos
 RANCHER_ACCESS_KEY              # chave do rancher
-ANCHER_SECRET_KEY               # token do rancher
+RANCHER_SECRET_KEY               # token do rancher
 PROJECT_ID_LOGSTASH_1           # ProjectId do logstash 1 (logstash-rabbit)
 SERVICE_ID_LOGSTASH_1           # serviceId do logstash 1 (logstash-rabbit)
 PROJECT_ID_LOGSTASH_2           # ProjectId do logstash 2 (logstash-pipeline)
