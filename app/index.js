@@ -41,16 +41,6 @@ const rancherOptions1 = {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////// Configuração para restartar o logstash-pipeline ////////////////////
-const rancherOptions2 = {
-    RANCHER_ACCESS_KEY: rancher_access_key,
-    RANCHER_SECRET_KEY: rancher_secret_key,
-    PROJECT_ID: rancher_project_id_2,
-    SERVICE_ID: rancher_service_id_2,
-    RANCHER_URL: rancher_url
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /**
@@ -62,20 +52,14 @@ async function main () {
         try {
             res = await request( rabbitOptions );
             var publishRate = res[ 0 ].message_stats.publish_details.rate;
-            var deliveryRate = res[ 0 ].message_stats.deliver_details.rate;
             // deixa a gente ver a mágica em ambiente dev
             if ( process.env.NODE_ENV != 'production' ) {
                 console.log( "Publish Rate: " + publishRate );
-                console.log( "Consumo " + deliveryRate );
                 console.log( '----------------------------' )
             }
 
             if ( publishRate < 30 ) {
                 await lowPublish( publishRate );
-            }
-
-            if ( deliveryRate < 30 ) {
-                await lowDelivery( deliveryRate );
             }
 
         } catch ( erro ) {
@@ -97,19 +81,18 @@ async function lowPublish ( publishRate ) {
     if ( publishRate != 0 ) {
         var msg = `Fluxo anômalo na entrada da Geocontrol: ${publishRate} msgs/s`;
         console.log( msg );
-
-        await notifySlack( msg, 'alert' );
+        notifySlack( msg, 'alert' );
 
     } else if ( publishRate == 0 ) {
         var msg = `A GEOCONTROL CAIU! ( Corram para as colinas! ). ` +
             `Vou reiniciar o logstash-rabbit agora...`;
         console.log( msg );
-        await notifySlack( msg, 'bug' );
+        notifySlack( msg, 'bug' );
 
         var rate = publishRate;
         while ( rate == 0 ) {
             console.log( 'reiniciando rancher' );
-            await restartRancher( rancherOptions1 );
+            restartRancher( rancherOptions1 );
             sleep( 180 ); // aguarda 3 minutos para ter certeza que o rancher ja voltou
 
             // verifica o fluxo no RabbitMQ novamente para ver se a geocontrol já voltou
@@ -141,58 +124,6 @@ async function lowPublish ( publishRate ) {
     }
 }
 
-
-
-
-/**
- * Executa notificações no slack e restarts no rancher em caso de quedas de velocidade de consumo
- * @param {*} deliveryRate velocidade de fluxo no RabbitMQ sendo consumido em nossa infra interna
- */
-async function lowDelivery ( deliveryRate ) {
-    if ( deliveryRate != 0 ) {
-        var msg = `Fluxo anômalo no consumo interno da pipeline : ${deliveryRate} msgs/s`;
-        console.log( msg );
-        await notifySlack( msg, 'alert' );
-
-    } else if ( deliveryRate == 0 ) {
-        var msg = `O LOGSTASH-PIPELINE CAIU!!!! ( Corram para as colinas! ). ` +
-            `Vou reiniciar o logstash-pipeline agora...`;
-        console.log( msg );
-        await notifySlack( msg, 'bug' );
-
-        var rate = deliveryRate;
-        while ( rate == 0 ) {
-            console.log( 'reiniciando logstash-pipeline' );
-            await restartRancher( rancherOptions2 );
-            sleep( 180 ); // aguarda 3 minutos para ter certeza que o rancher ja voltou
-
-            // verifica o fluxo no RabbitMQ novamente para ver se a pipeline já voltou
-            try {
-                var res = await request( rabbitOptions );
-                rate = res[ 0 ].message_stats.publish_details.rate;
-                if ( rate == 0 ) {
-                    var msg = `O Logstash-Pipeline ainda não voltou! ` +
-                        `vou reiniciar o logstash-pipeline novamente`;
-                    console.log( msg );
-                    notifySlack( msg, 'note' );
-                } else {
-                    var msg = `O Logstash-pipeline se reconectou! todos os sistemas funcionando. ` +
-                        `Velocidade de publish: ${res[ 0 ].message_stats.publish_details.rate} msgs/s ` +
-                        `Velocidade de Delivery: ${rate} msgs/s`;
-                    console.log( msg );
-                    notifySlack( msg, 'success' );
-                }
-            } catch ( erro ) {
-                var msg = `Eu enviei um comando para reiniciar o logstash-pipeline no rancher, ` +
-                    `e após esperar por 3 minutos, fui consultar a situação no RabbitMQ, ` +
-                    `mas obtive o seguinte erro: ${erro}.  Vou tentar reiniciar novamente!`;
-                console.log( msg );
-                notifySlack( msg, 'bug' );
-            }
-        }
-
-    }
-}
 
 
 /**
