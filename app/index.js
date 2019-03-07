@@ -47,7 +47,7 @@ async function main () {
                 console.log( '----------------------------' )
             }
 
-            if ( publishRate < 30 ) {
+            if ( publishRate < 15 ) {
                 await lowPublish( publishRate );
             }
 
