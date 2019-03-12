@@ -44,7 +44,6 @@ export async function lowPublish ( publishRate: number ) {
                         `Velocidade de Delivery: ${deliveryRate} msgs/s`;
                     await notifySlack( message, names.ok );
                     resetCount = 0;
-                    break; // só por via das dúvidas... afinal isso não é uma ciência exata..
                 } else {
                     let message = `${down}${resetCount++}`;
                     await notifySlack( message, names.note );
