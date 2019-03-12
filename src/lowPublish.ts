@@ -3,6 +3,7 @@ import { names, fluxoanomalo, queda, voltou, down, rancherFail } from './common/
 import { rancherInterval } from "./common/config";
 import { restart } from "./rancher";
 import { checkRabbit } from "./rabbit";
+import { stat } from "fs";
 
 /*
 Módulo que trata os eventos de baixo publish e quedas de publish (Quedas da geocontrol)
@@ -34,6 +35,7 @@ export async function lowPublish ( publishRate: number ) {
                 await notifySlack( message, names.note );
             }
             let status: any = await checkRabbit();
+            console.log( "debug: status:" + status );
             if ( status != undefined ) {
                 console.log( "debug: CAIU NO STATUS" );
                 rate = Number( status[ 0 ].message_stats.publish_details.rate );
