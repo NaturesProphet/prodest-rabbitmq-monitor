@@ -11,4 +11,4 @@ RUN npm install typescript
 RUN npm run build
 
 
-CMD ["npm","run", "start:prod"]
+CMD ["npm","run", "start"]

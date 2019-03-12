@@ -33,6 +33,7 @@ export async function lowPublish ( publishRate: number ) {
             }
             let status: any = await checkRabbit();
             if ( status ) {
+                console.log( "debug: CAIU NO STATUS" );
                 publishRate = status[ 0 ].message_stats.publish_details.rate;
                 let deliveryRate = status[ 0 ].message_stats.deliver_details.rate;
                 if ( publishRate > 0 ) {

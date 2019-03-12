@@ -18,9 +18,60 @@ const rabbitUri: string = `http://${rabbitHost}:${rabbitApiPort}/api/vhosts`;
 const username: string = String( process.env.RABBIT_USER );
 const password: string = String( process.env.RABBIT_PASSWORD );
 
+async function checkEnv () {
+    let ok: boolean = true;
+    if ( password == undefined ) {
+        console.log( "[  CONF  ] Password não configurado" );
+        ok = false;
+    }
+    if ( rabbitUri == undefined ) {
+        console.log( "[  CONF  ] URL do Rabbit não configurada" );
+        ok = false;
+    }
+    if ( rancherAccessKey == undefined ) {
+        console.log( "[  CONF  ] Access Key não configurado" );
+        ok = false;
+    }
+    if ( rancherSecretKey == undefined ) {
+        console.log( "[  CONF  ] SecretKey não configurado" );
+        ok = false;
+    }
+    if ( rancherServiceId == undefined ) {
+        console.log( "[  CONF  ] ServiceID não configurado" );
+        ok = false;
+    }
+    if ( rancherUrl == undefined ) {
+        console.log( "[  CONF  ] URL do Rancher não configurada" );
+        ok = false;
+    }
+    if ( slackChannel == undefined ) {
+        console.log( "[  CONF  ] Canal do slack não configurado" );
+        ok = false;
+    }
+    if ( slackWebHook == undefined ) {
+        console.log( "[  CONF  ] WebHook do slack não configurado" );
+        ok = false;
+    }
+    if ( username == undefined ) {
+        console.log( "[  CONF  ] Usuario do Rabbit não configurado" );
+        ok = false;
+    }
+    if ( rabbitHost == undefined ) {
+        console.log( "[  CONF  ] Servidor do Rabbit não configurado" );
+        ok = false;
+    }
+    if ( rabbitApiPort == undefined ) {
+        console.log( "[  CONF  ] Porta do Rabbit não configurada" );
+        ok = false;
+    }
+    if ( !ok ) {
+        console.log( "[EnvERROR] Falha na configuração do ambiente. saindo!" );
+        process.exit( 1 );
+    }
+}
 
 export {
     rabbitInterval, rancherInterval, rancherAccessKey, rancherSecretKey,
     rancherProjectId, rancherServiceId, rancherUrl, slackWebHook, slackChannel,
-    username, password, rabbitUri, env, rabbitHost, rabbitApiPort
+    username, password, rabbitUri, env, rabbitHost, rabbitApiPort, checkEnv
 }

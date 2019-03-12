@@ -4,7 +4,7 @@
   "description": "bot para monitoramento do RabbitMQ na pilha de realtime do transcol online",
   "main": "app.ts",
   "scripts": {
-    "start:dev": "ts-node src/main.ts",
+    "start": "ts-node src/main.ts",
     "start:prod": "node dist/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",
     "rabbitmq": "docker run -d --hostname rabbitMQ --name rabbitmq-srv -p 5672:5672 -p 8080:15672 rabbitmq:3-management",
@@ -24,12 +24,13 @@
   "devDependencies": {
     "@types/node": "^11.11.1",
     "@types/request-promise": "^4.1.42",
+    "commitizen": "^3.0.5",
+    "cz-conventional-changelog": "^2.1.0",
+    "dotenv": "^6.2.0",
+    "standard-version": "^5.0.0",
     "ts-node": "^8.0.3",
     "typescript": "^3.3.3333",
-    "validate-commit-msg": "^2.14.0",
-    "standard-version": "^5.0.0",
-    "cz-conventional-changelog": "^2.1.0",
-    "commitizen": "^3.0.5"
+    "validate-commit-msg": "^2.14.0"
   },
   "dependencies": {
     "request": "^2.88.0",
