@@ -25,6 +25,7 @@ export async function lowPublish ( publishRate: number ) {
 
         let resetCount: number = 0; // contador de tentativas de reconexão
         while ( publishRate == 0 ) {
+            console.log( "debug: CAIU NO WHILE" );
             try {
                 await restart( rancherInterval ); // reinicia o serviço e aguarda 3 minutos
             } catch ( erro ) {
@@ -48,7 +49,7 @@ export async function lowPublish ( publishRate: number ) {
                     //volta ao inicio do while e tenta denovo até voltar
                 }
             } else {
-                console.log( "STATUS UNDEFINED" );
+                console.log( "debug: STATUS UNDEFINED" );
             }
         }
     }
