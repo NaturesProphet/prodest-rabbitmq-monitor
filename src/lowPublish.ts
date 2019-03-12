@@ -32,7 +32,7 @@ export async function lowPublish ( publishRate: number ) {
                 await notifySlack( message, names.note );
             }
             let status: any = await checkRabbit();
-            if ( status ) {
+            if ( status != undefined ) {
                 console.log( "debug: CAIU NO STATUS" );
                 publishRate = status[ 0 ].message_stats.publish_details.rate;
                 let deliveryRate = status[ 0 ].message_stats.deliver_details.rate;
@@ -47,6 +47,8 @@ export async function lowPublish ( publishRate: number ) {
                     await notifySlack( message, names.note );
                     //volta ao inicio do while e tenta denovo até voltar
                 }
+            } else {
+                console.log( "STATUS UNDEFINED" );
             }
         }
     }
