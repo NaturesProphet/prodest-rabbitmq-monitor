@@ -41,10 +41,6 @@ async function checkEnv () {
         console.log( "[  CONF  ] Access Key não configurado" );
         ok = false;
     }
-    if ( conf.rancherProjectId == undefined ) {
-        console.log( "[  CONF  ] ProjectID não configurado" );
-        ok = false;
-    }
     if ( conf.rancherSecretKey == undefined ) {
         console.log( "[  CONF  ] SecretKey não configurado" );
         ok = false;
@@ -61,7 +57,7 @@ async function checkEnv () {
         console.log( "[  CONF  ] Canal do slack não configurado" );
         ok = false;
     }
-    if ( conf.slackWebHook ) {
+    if ( conf.slackWebHook == undefined ) {
         console.log( "[  CONF  ] WebHook do slack não configurado" );
         ok = false;
     }
