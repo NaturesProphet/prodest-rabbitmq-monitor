@@ -22,5 +22,5 @@ const password: string = String( process.env.RABBIT_PASSWORD );
 export {
     rabbitInterval, rancherInterval, rancherAccessKey, rancherSecretKey,
     rancherProjectId, rancherServiceId, rancherUrl, slackWebHook, slackChannel,
-    username, password, rabbitUri
+    username, password, rabbitUri, env, rabbitHost, rabbitApiPort
 }
