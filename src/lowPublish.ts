@@ -24,7 +24,8 @@ export async function lowPublish ( publishRate: number ) {
         await notifySlack( msg, names.bug );
 
         let resetCount: number = 0; // contador de tentativas de reconexão
-        while ( publishRate == 0 ) {
+        let rate: number = 0;
+        while ( rate == 0 ) {
             console.log( "debug: CAIU NO WHILE" );
             try {
                 await restart( rancherInterval ); // reinicia o serviço e aguarda 3 minutos
@@ -35,10 +36,11 @@ export async function lowPublish ( publishRate: number ) {
             let status: any = await checkRabbit();
             if ( status != undefined ) {
                 console.log( "debug: CAIU NO STATUS" );
-                publishRate = status[ 0 ].message_stats.publish_details.rate;
+                rate = Number( status[ 0 ].message_stats.publish_details.rate );
+                console.log( "debug: rate dentro do while " + rate );
                 let deliveryRate = status[ 0 ].message_stats.deliver_details.rate;
-                if ( publishRate > 0 ) {
-                    let message = `${voltou}Velocidade de publish: ${publishRate} msgs/s ` +
+                if ( rate > 0 ) {
+                    let message = `${voltou}Velocidade de publish: ${rate} msgs/s ` +
                         `Velocidade de Delivery: ${deliveryRate} msgs/s`;
                     await notifySlack( message, names.ok );
                     resetCount = 0;
