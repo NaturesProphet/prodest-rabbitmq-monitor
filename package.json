@@ -1,6 +1,6 @@
 {
   "name": "realtime-bot",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "bot para monitoramento do RabbitMQ na pilha de realtime do transcol online",
   "main": "app.ts",
   "scripts": {
