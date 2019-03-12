@@ -1,4 +1,4 @@
-import { username, password, rabbitUri } from "./common/config";
+import { username, password, rabbitUri, rabbitInterval } from "./common/config";
 import * as request from 'request-promise';
 import { notifySlack } from "./notifications";
 import { names } from './common/messages.json';
@@ -19,13 +19,32 @@ export async function checkRabbit (): Promise<any> {
         json: true
     };
 
-    try {
-        return await request.get( rabbitOptions );
-    } catch ( erro ) {
-        let message = `Erro ao enviar um GET ao pluguin-management do RabbitMQ: ${erro.message}`;
-        setTimeout(
-            async function () {
-                await notifySlack( message, names.note );
-            }, 60000 ); // se der erro, força aguardar 1 minuto.
-    }
+    // try {
+    //     return await request.get( rabbitOptions );
+    // } catch ( erro ) {
+    //     let message = `Erro ao enviar um GET ao pluguin-management do RabbitMQ: ${erro.message}`;
+    //     setTimeout(
+    //         async function () {
+    //             await notifySlack( message, names.note );
+    //         }, 60000 ); // se der erro, força aguardar 1 minuto.
+    // }
+
+
+    return new Promise(
+        async function ( resolve, reject ) {
+            try {
+                const response = await request.get( rabbitOptions );
+                setTimeout(
+                    function () {
+                        resolve( response );
+                    }, rabbitInterval );
+            }
+            catch ( erro ) {
+                setTimeout(
+                    function () {
+                        reject( erro );
+                    }, rabbitInterval );
+            }
+        }
+    );
 }

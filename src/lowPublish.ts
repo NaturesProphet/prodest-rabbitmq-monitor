@@ -34,10 +34,8 @@ export async function lowPublish ( publishRate: number ) {
                 let message = `${rancherFail}${erro.message} Tentativa ${resetCount++}`;
                 await notifySlack( message, names.note );
             }
-            let status: any = await checkRabbit();
-            console.log( "debug: status:" + status );
-            if ( status != undefined ) {
-                console.log( "debug: CAIU NO STATUS" );
+            try {
+                let status: any = await checkRabbit();
                 rate = Number( status[ 0 ].message_stats.publish_details.rate );
                 console.log( "debug: rate dentro do while " + rate );
                 let deliveryRate = status[ 0 ].message_stats.deliver_details.rate;
@@ -52,8 +50,9 @@ export async function lowPublish ( publishRate: number ) {
                     await notifySlack( message, names.note );
                     //volta ao inicio do while e tenta denovo até voltar
                 }
-            } else {
-                console.log( "debug: STATUS UNDEFINED" );
+            } catch ( erro ) {
+                let message = `Erro ao enviar um GET ao pluguin-management do RabbitMQ: ${erro.message}`;
+                await notifySlack( message, names.note );
             }
         }
     }
