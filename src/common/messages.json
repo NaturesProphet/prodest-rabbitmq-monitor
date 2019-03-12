@@ -1,0 +1,13 @@
+{
+    "names": {
+        "bug": "Falha",
+        "alert": "Alerta",
+        "note": "Nota",
+        "ok": "Uhul"
+    },
+    "fluxoanomalo": "Fluxo anômalo na entrada da Geocontrol: ",
+    "queda": "A GEOCONTROL CAIU! ( Corram para as colinas! ). Vou reiniciar o logstash-rabbit agora...",
+    "voltou": "A Geocontrol se reconectou! todos os sistemas funcionando. ",
+    "down": "A Geocontrol ainda não voltou! vou reiniciar o logstash-rabbit novamente. Tentativa ",
+    "rancherFail": "`Erro ao tentar enviar um POST à API do RANCHER: "
+}

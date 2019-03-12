@@ -1,14 +1,17 @@
 {
-  "name": "rabbit-monitor",
-  "version": "0.1.12",
-  "description": "Sistema para monitorar o trafego de informações no RabbitMQ do realtime e reiniciar o produtor em casos de queda da geocontrol, além de notificar a galera pelo slack",
-  "main": "index.js",
+  "name": "realtime-bot",
+  "version": "0.0.0",
+  "description": "bot para monitoramento do RabbitMQ na pilha de realtime do transcol online",
+  "main": "app.ts",
   "scripts": {
+    "start:dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/main.ts",
+    "start:prod": "node dist/main.js",
+    "build": "tsc -p .",
     "rabbitmq": "docker run -d --hostname rabbitMQ --name rabbitmq-srv -p 5672:5672 -p 8080:15672 rabbitmq:3-management",
     "stop:rabbitmq": "docker stop rabbitmq-srv && docker rm rabbitmq-srv",
     "commit": "git-cz",
     "release": "standard-version",
-    "start": "node app/index.js"
+    "clean": "rm -R node_modules dist"
   },
   "keywords": [
     "rabbitmq",
@@ -17,18 +20,34 @@
     "notificações"
   ],
   "author": "Mateus Garcia",
-  "license": "ISC",
-  "dependencies": {
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4",
-    "restart-rancher": "^1.1.4",
-    "slack-notify": "^0.1.7",
-    "sleep": "^6.0.0"
-  },
+  "license": "Apache-2.0",
   "devDependencies": {
+    "@types/node": "^11.11.1",
+    "nodemon": "^1.18.10",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.3333",
     "validate-commit-msg": "^2.14.0",
     "standard-version": "^5.0.0",
     "cz-conventional-changelog": "^2.1.0",
     "commitizen": "^3.0.5"
+  },
+  "dependencies": {
+    "@types/request-promise": "^4.1.42",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "validate-commit-msg": {
+      "types": "conventional-commit-types",
+      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "validate-commit-msg"
+    }
   }
 }

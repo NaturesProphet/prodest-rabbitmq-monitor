@@ -1,11 +1,12 @@
 FROM registry.es.gov.br/espm/infraestrutura/containers/node:8.12.0
 
-RUN mkdir -p /usr/rabbit-monitor
-WORKDIR /usr/rabbit-monitor
+RUN mkdir -p /usr/realtime-bot
+WORKDIR /usr/realtime-bot
 
-COPY package.json /usr/rabbit-monitor
-COPY app /usr/rabbit-monitor/app
-RUN npm install
+COPY package.json /usr/realtime-bot
+COPY src /usr/realtime-bot/src
+RUN npm install --prod
+RUN npm run build
 
 
-CMD ["npm","run", "start"]
+CMD ["npm","run", "start:prod"]

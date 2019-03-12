@@ -22,8 +22,6 @@ RANCHER_ACCESS_KEY              # chave do rancher
 RANCHER_SECRET_KEY               # token do rancher
 PROJECT_ID_LOGSTASH_1           # ProjectId do logstash 1 (logstash-rabbit)
 SERVICE_ID_LOGSTASH_1           # serviceId do logstash 1 (logstash-rabbit)
-PROJECT_ID_LOGSTASH_2           # ProjectId do logstash 2 (logstash-pipeline)
-SERVICE_ID_LOGSTASH_2           # serviceId do logstash 2 (logstash-pipeline)
 RANCHER_URL                     # uri da api do rancher
 ```
 
