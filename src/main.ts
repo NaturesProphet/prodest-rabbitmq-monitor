@@ -55,7 +55,7 @@ async function VerificaRabbit () {
             if ( publishRate != 0 && count > 0 ) {
                 let msg = `O fluxo está se normalizando novamente. Não reiniciarei o logstash agora.\n`
                     + `Publish rate: ${publishRate}`;
-                await notifySlack( msg, names.alert );
+                await notifySlack( msg, names.ok );
                 count = 0;
             }
 
