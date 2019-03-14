@@ -52,7 +52,7 @@ async function VerificaRabbit () {
 
             //se o fluxo está voltando sozinho e a contagem está abaixo do limiar, reseta a contagem
             if ( publishRate != 0 && count > 0 ) {
-                let msg = `O fluxo está se normalizando novamente. Não reiniciarei o logstash agora.\n`
+                let msg = `O fluxo está se normalizando novamente. Não será necessário reiniciar o logstash agora.\n`
                     + `Publish rate: ${publishRate}`;
                 await notifySlack( msg, names.ok );
                 count = 0;
