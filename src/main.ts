@@ -38,8 +38,7 @@ async function VerificaRabbit () {
             // se o fluxo está parado, mas abaixo do limiar, avisa o slack.
             if ( publishRate == 0 ) {
                 count++;
-                let msg = `A Velocidade de publish está em 0. Sequência: ${count}\n` +
-                    `Quando a sequência atingir ${limiarReset} reiniciarei o logstash-rabbit`;
+                let msg = `O fluxo de dados da Geocontrol está parado. Sequência para restart: ${count}/${limiarReset}`;
                 await notifySlack( msg, names.alert );
             }
 
