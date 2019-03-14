@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.21](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.1.20...v0.1.21) (2019-03-14)
+
+
+
 ## [0.1.20](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.1.19...v0.1.20) (2019-03-14)
 
 
