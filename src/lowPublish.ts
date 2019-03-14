@@ -3,7 +3,6 @@ import { names, fluxoanomalo, queda, voltou, down, rancherFail } from './common/
 import { rancherInterval } from "./common/config";
 import { restart } from "./rancher";
 import { checkRabbit } from "./rabbit";
-import { stat } from "fs";
 
 /*
 Módulo que trata os eventos de baixo publish e quedas de publish (Quedas da geocontrol)

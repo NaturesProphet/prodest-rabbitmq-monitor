@@ -17,6 +17,7 @@ const rabbitApiPort: number = Number( process.env.RABBIT_API_PORT );
 const rabbitUri: string = `http://${rabbitHost}:${rabbitApiPort}/api/vhosts`;
 const username: string = String( process.env.RABBIT_USER );
 const password: string = String( process.env.RABBIT_PASSWORD );
+const limiarReset: number = Number( process.env.LIMIAR_RESET ) || 10;
 
 async function checkEnv () {
     let ok: boolean = true;
@@ -73,5 +74,6 @@ async function checkEnv () {
 export {
     rabbitInterval, rancherInterval, rancherAccessKey, rancherSecretKey,
     rancherProjectId, rancherServiceId, rancherUrl, slackWebHook, slackChannel,
-    username, password, rabbitUri, env, rabbitHost, rabbitApiPort, checkEnv
+    username, password, rabbitUri, env, rabbitHost, rabbitApiPort, checkEnv,
+    limiarReset
 }
