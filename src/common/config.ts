@@ -17,7 +17,7 @@ const rabbitApiPort: number = Number( process.env.RABBIT_API_PORT );
 const rabbitUri: string = `http://${rabbitHost}:${rabbitApiPort}/api/vhosts`;
 const username: string = String( process.env.RABBIT_USER );
 const password: string = String( process.env.RABBIT_PASSWORD );
-const limiarReset: number = Number( process.env.LIMIAR_RESET ) || 10;
+const limiarReset: number = Number( process.env.LIMIAR_RESET ) || 20;
 
 async function checkEnv () {
     let ok: boolean = true;
