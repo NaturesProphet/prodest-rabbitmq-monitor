@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.2.0](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.1.24...v0.2.0) (2019-03-20)
+
+
+### Features
+
+* **HighPublish:** Tratamento para fluxo alto ([8ffbb77](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/commit/8ffbb77))
+
+
+
 ## [0.1.24](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.1.23...v0.1.24) (2019-03-14)
 
 
