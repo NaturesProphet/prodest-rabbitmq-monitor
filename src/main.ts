@@ -3,7 +3,7 @@ if ( process.env.NODE_ENV != 'production' ) {
 }
 import { checkEnv, env, limiarReset } from './common/config';
 import { checkRabbit } from './rabbit';
-import { lowPublish } from './lowPublish';
+import { anomalousPublish } from './anomalousPublish';
 import { notifySlack } from "./notifications";
 import { names } from './common/messages.json';
 
@@ -29,9 +29,9 @@ async function VerificaRabbit () {
             }
 
 
-            // se o fluxo estiver bem abaixo do normal ( em média cerca de ~ 200 ) verifica e trata o caso.
-            if ( publishRate < 15 && publishRate > 0 ) {
-                await lowPublish( publishRate );
+            // se o fluxo estiver fora do normal ( em média cerca de ~ 200 ) verifica e trata o caso.
+            if ( ( publishRate < 15 && publishRate > 0 ) || publishRate > 500 ) {
+                await anomalousPublish( publishRate );
             }
 
 
@@ -46,7 +46,7 @@ async function VerificaRabbit () {
             // se o fluxo está parado e atingiu o limiar, reseta o logstash-rabbit
             if ( count == limiarReset && publishRate == 0 ) {
                 count = 0;
-                await lowPublish( publishRate );
+                await anomalousPublish( publishRate );
             }
 
 

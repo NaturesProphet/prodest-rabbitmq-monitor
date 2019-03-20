@@ -13,7 +13,7 @@ Módulo que trata os eventos de baixo publish e quedas de publish (Quedas da geo
  * Executa notificações no slack e restarts no rancher em caso de quedas de velocidade de publish
  * @param publishRate velocidade de fluxo que chega da Geocontrol via logstash
  */
-export async function lowPublish ( publishRate: number ) {
+export async function anomalousPublish ( publishRate: number ) {
 
     if ( publishRate != 0 ) {
         let msg = `${fluxoanomalo}${publishRate} msgs/s`;
