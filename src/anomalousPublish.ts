@@ -1,7 +1,7 @@
 import { notifySlack } from "./notifications";
 import { names, fluxoanomalo, queda, voltou, down, rancherFail } from './common/messages.json';
 import { rancherInterval } from "./common/config";
-import { restart } from "./rancher";
+import { restartLogstash1 } from "./rancher";
 import { checkRabbit } from "./rabbit";
 
 /*
@@ -28,7 +28,7 @@ export async function anomalousPublish ( publishRate: number ) {
         while ( rate == 0 ) {
             console.log( "debug: CAIU NO WHILE" );
             try {
-                await restart( rancherInterval ); // reinicia o serviço e aguarda 3 minutos
+                await restartLogstash1( rancherInterval ); // reinicia o serviço e aguarda 3 minutos
             } catch ( erro ) {
                 let message = `${rancherFail}${erro.message} Tentativa ${resetCount++}`;
                 await notifySlack( message, names.note );

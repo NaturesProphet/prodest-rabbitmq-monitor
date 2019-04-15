@@ -10,19 +10,27 @@ Neste caso, os serviços estão todos em Docker, hospedados em um servidor Ranch
 A intenção é estabilizar nossas pilhas de serviço no rancher, nao sendo mais necessário a presença na prodest para reiniciar os logstashs em caso de queda da Geocontrol, que até então, derrubava o logstash 1 junto.
 
 ## Variáveis de ambiente para a utilização correta
+
 ```bash
 NODE_ENV                        # Ajuste para 'production' quando for pra vera.
+
 RABBIT_HOST                     # Servidor do RabbitMQ
 RABBIT_API_PORT                 # Porta do RabbitMQ
 RABBIT_USER                     # Usuário do RabbitMQ
 RABBIT_PASSWORD                 # Senha do RabbitMQ
+
 SLACK_WEB_HOOK                  # WebHook configurado no slack apps
 SLACK_CHANNEL                   # Canal no slack onde serão enviadas as mensagens de eventos
+
 RANCHER_ACCESS_KEY              # chave do rancher
 RANCHER_SECRET_KEY              # token do rancher
-PROJECT_ID_LOGSTASH_1           # ProjectId do logstash 1 (logstash-rabbit)
-SERVICE_ID_LOGSTASH_1           # serviceId do logstash 1 (logstash-rabbit)
 RANCHER_URL                     # uri da api do rancher
+
+PROJECT_ID_LOGSTASH1            # ProjectId do logstash 1 (logstash-rabbit)
+SERVICE_ID_LOGSTASH1            # serviceId do logstash 1 (logstash-rabbit)
+PROJECT_ID_LOGSTASH2            # ProjectId do logstash 2 (logstash-pipeline)
+SERVICE_ID_LOGSTASH2            # serviceId do logstash 2 (logstash-pipeline)
+
 LIMIAR_RESET                    # numero de medições zeradas antes de reiniciar o logstash-rabbit
 ```
 
