@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.1](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.3.0...v0.3.1) (2019-04-16)
+
+
+### Bug Fixes
+
+* **pipeline:** resolvido um erro que reinicia o pipeline sem necessidade. ([9bc5840](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/commit/9bc5840))
+
+
+
 # [0.3.0](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.2.0...v0.3.0) (2019-04-16)
 
 
