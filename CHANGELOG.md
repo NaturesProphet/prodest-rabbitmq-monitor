@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.3.0](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.2.0...v0.3.0) (2019-04-16)
+
+
+### Features
+
+* **Logstash-pipeline:** Bot agora também escuta o logstash pipeline ([34f4d7b](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/commit/34f4d7b))
+
+
+
 # [0.2.0](https://gitlab.es.gov.br/espm/Transcol-Online/Realtime/rabbit-monitor/compare/v0.1.24...v0.2.0) (2019-03-20)
 
 
