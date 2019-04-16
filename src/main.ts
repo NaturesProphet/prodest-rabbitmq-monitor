@@ -67,7 +67,7 @@ async function VerificaRabbit () {
 
 
             //se o fluxo de consumo zerou, reinicia o logstash-pipeline
-            if ( deliveryRate == 0 ) {
+            if ( deliveryRate == 0 && publishErrorCount == 0 ) {
                 if ( DeliveryErrorCount == 5 ) { // após 5 medidas zeradas, restarta o logstash2
                     restartLogstash2();
                     let msg = `O logstash-pipeline caiu. um pedido de restart foi enviado.`;
